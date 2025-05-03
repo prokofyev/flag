@@ -1,3 +1,6 @@
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
+
 import pygame
 import sys
 import io
@@ -6,8 +9,6 @@ import math
 import os
 import random
 import json
-import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
 # Load translations from JSON file
 with open('translations.json', 'r', encoding='utf-8') as f:
@@ -32,7 +33,7 @@ button_width = 300
 font = pygame.font.SysFont('Arial', 24)
 
 def load_flag(file_path):
-    name = file_path.replace('img/Flag_of_', '').replace('.svg', '')
+    name = file_path.replace('img/flags/Flag_of_', '').replace('.svg', '')
     svg_data = cairosvg.svg2png(url=file_path)
     image_stream = io.BytesIO(svg_data)
     original_flag = pygame.image.load(image_stream)
@@ -48,9 +49,9 @@ def load_all_flags():
     
     # Get all flag files
     flag_files = set()
-    for file in os.listdir('img'):
+    for file in os.listdir('img/flags'):
         if file.endswith('.svg'):
-            name, flag = load_flag(f'img/{file}')
+            name, flag = load_flag(f'img/flags/{file}')
             flag_files.add(name)
             flags[name] = flag
             flag_names.append(name)
@@ -82,13 +83,18 @@ def new_round(flag_names, previous_flag, shown_flags):
     current_flag = random.choice(available_flags)
     shown_flags.add(current_flag)
     
-    current_options = [current_flag]
-    while len(current_options) < 4:
-        option = random.choice(flag_names)
-        if option not in current_options:
-            current_options.append(option)
-    random.shuffle(current_options)
+    # Use all available flags as options if less than 4 flags total
+    all_flags = list(set(flag_names))  # Convert to list to avoid modifying the original
+    if len(all_flags) <= 4:
+        current_options = all_flags
+    else:
+        current_options = [current_flag]
+        while len(current_options) < 4:
+            option = random.choice(all_flags)
+            if option not in current_options:
+                current_options.append(option)
     
+    random.shuffle(current_options)
     buttons = [create_button(i, option) for i, option in enumerate(current_options)]
     
     return current_flag, current_options, buttons
@@ -101,7 +107,7 @@ def get_score_word(score):
     else:
         return "очков"
 
-def draw_end_screen(screen, score):
+def draw_end_screen(screen, score, max_score):
     screen.fill((200, 200, 255))
     
     # Draw "Конец игры"
@@ -112,7 +118,7 @@ def draw_end_screen(screen, score):
     
     # Draw score with correct word form
     score_font = pygame.font.SysFont('Arial', 36)
-    score_text = score_font.render(f'Вы набрали {score} {get_score_word(score)}', True, (0, 0, 0))
+    score_text = score_font.render(f'Вы набрали {score} из {max_score} {get_score_word(max_score)}', True, (0, 0, 0))
     score_rect = score_text.get_rect(center=(window_width//2, window_height//2 + 50))
     screen.blit(score_text, score_rect)
     
@@ -156,32 +162,132 @@ def handle_click(mouse_pos, buttons, current_options, current_flag, disabled_but
                 return i, False
     return None, False
 
+def get_available_letters(flag_names):
+    # Get all first letters from country translations
+    letters = set()
+    for name in flag_names:
+        if name in COUNTRY_TRANSLATIONS:
+            first_letter = COUNTRY_TRANSLATIONS[name]['name'][0].upper()
+            if first_letter.isalpha():
+                letters.add(first_letter)
+    return sorted(list(letters))
+
+def filter_flags_by_letter(flag_names, letter):
+    return [name for name in flag_names if name in COUNTRY_TRANSLATIONS and 
+            COUNTRY_TRANSLATIONS[name]['name'].upper().startswith(letter)]
+
+def choose_random_letter_and_flags(flag_names):
+    available_letters = get_available_letters(flag_names)
+    valid_letters = [letter for letter in available_letters 
+                    if len(filter_flags_by_letter(flag_names, letter)) >= 1]
+    chosen_letter = random.choice(valid_letters)
+    filtered_names = filter_flags_by_letter(flag_names, chosen_letter)
+    return chosen_letter, filtered_names
+
+def get_available_continents(flag_names):
+    continents = set()
+    for name in flag_names:
+        if name in COUNTRY_TRANSLATIONS:
+            continent = COUNTRY_TRANSLATIONS[name]['continent']
+            continents.add(continent)
+    return sorted(list(continents))
+
+def filter_flags_by_continent(flag_names, continent):
+    return [name for name in flag_names if name in COUNTRY_TRANSLATIONS and 
+            COUNTRY_TRANSLATIONS[name]['continent'] == continent]
+
+def choose_random_continent_and_flags(flag_names):
+    available_continents = get_available_continents(flag_names)
+    valid_continents = [continent for continent in available_continents 
+                       if len(filter_flags_by_continent(flag_names, continent)) >= 1]
+    chosen_continent = random.choice(valid_continents)
+    filtered_names = filter_flags_by_continent(flag_names, chosen_continent)
+    return chosen_continent, filtered_names
+
+def start_new_game(flag_names, is_first_start=False):
+    chosen_continent, filtered_names = choose_random_continent_and_flags(flag_names)
+    max_possible_score = len(filtered_names) * START_ROUND_SCORE
+
+    return {
+        'score': 0,
+        'max_score': max_possible_score, 
+        'time': 0,
+        'previous_flag': None,
+        'round_score': START_ROUND_SCORE,
+        'disabled_buttons': set(),
+        'highlight_end_time': 0,
+        'correct_button': None,
+        'shown_flags': set(),
+        'game_over': False,
+        'show_exit_confirmation': False,
+        'current_continent': chosen_continent,  # Changed from current_letter
+        'filtered_flag_names': filtered_names,
+        'show_splash': is_first_start,
+        'splash_start_time': pygame.time.get_ticks() if is_first_start else 0
+    }
+
+# In main game loop, update the letter info text:
+def draw_splash_screen(screen, scaled_splash):
+    screen.fill((200, 200, 255))
+    
+    # Create fonts and render texts
+    title_font = pygame.font.SysFont('Arial', 30, bold=True)
+    title2_font = pygame.font.SysFont('Arial', 52, bold=True)
+    authors_font = pygame.font.SysFont('Arial', 18)
+    year_font = pygame.font.SysFont('Arial', 24)
+    
+    title_text = title_font.render('Викторина', True, (0, 0, 0))
+    title2_text = title2_font.render('Флаги', True, (0, 0, 0))
+    authors_text = authors_font.render('игра Александра и Ильи Прокофьевых', True, (0, 0, 0))
+    year_text = year_font.render('2025 год', True, (0, 0, 0))
+    
+    # Calculate positions for left-aligned image and right-aligned text
+    image_rect = scaled_splash.get_rect(midleft=(0, window_height//2))
+    title_rect = title_text.get_rect(midleft=(image_rect.right + 50, window_height//2 - 100))
+    title2_rect = title2_text.get_rect(midleft=(image_rect.right + 50, window_height//2 - 50))
+    authors_rect = authors_text.get_rect(midleft=(image_rect.right + 50, window_height//2))
+    year_rect = year_text.get_rect(midleft=(image_rect.right + 50, window_height//2 + 50))
+    
+    # Draw everything
+    screen.blit(scaled_splash, image_rect)
+    screen.blit(title_text, title_rect)
+    screen.blit(title2_text, title2_rect)
+    screen.blit(authors_text, authors_rect)
+    screen.blit(year_text, year_rect)
+
+def load_and_scale_splash_image(image_path, window_width, window_height):
+    # Load splash screen image and scale maintaining aspect ratio
+    splash_image = pygame.image.load(image_path)
+    original_width = splash_image.get_width()
+    original_height = splash_image.get_height()
+    aspect_ratio = original_width / original_height
+    
+    # Calculate new dimensions to fit window while maintaining aspect ratio
+    if aspect_ratio > 1:  # wider than tall
+        new_width = min(window_width - 0, original_width)
+        new_height = int(new_width / aspect_ratio)
+    else:  # taller than wide
+        new_height = min(window_height - 0, original_height)
+        new_width = int(new_height * aspect_ratio)
+    
+    return pygame.transform.scale(splash_image, (new_width, new_height))
+    
 def main():
     flags, flag_names, max_width = load_all_flags()
     
-    def start_new_game():
-        return {
-            'score': 0,
-            'time': 0,
-            'previous_flag': None,
-            'round_score': START_ROUND_SCORE,
-            'disabled_buttons': set(),
-            'highlight_end_time': 0,
-            'correct_button': None,
-            'shown_flags': set(),
-            'game_over': False,
-            'show_exit_confirmation': False
-        }
+    game_state = start_new_game(flag_names, is_first_start=True)
+    current_flag, current_options, buttons = new_round(game_state['filtered_flag_names'], 
+                                                     game_state['previous_flag'], 
+                                                     game_state['shown_flags'])
     
-    game_state = start_new_game()
-    current_flag, current_options, buttons = new_round(flag_names, game_state['previous_flag'], game_state['shown_flags'])
-    
+    scaled_splash = load_and_scale_splash_image('img/start.png', window_width, window_height)
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            elif event.type == pygame.KEYDOWN:
+            elif not game_state['show_splash'] and event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     if game_state['show_exit_confirmation']:
                         game_state['show_exit_confirmation'] = False
@@ -195,8 +301,10 @@ def main():
                         pygame.quit()
                         sys.exit()
                     elif game_state['game_over']:
-                        game_state = start_new_game()
-                        current_flag, current_options, buttons = new_round(flag_names, game_state['previous_flag'], game_state['shown_flags'])
+                        game_state = start_new_game(flag_names, is_first_start=False)  # Restart without splash
+                        current_flag, current_options, buttons = new_round(game_state['filtered_flag_names'], 
+                                                                         game_state['previous_flag'], 
+                                                                         game_state['shown_flags'])
             elif event.type == pygame.MOUSEBUTTONDOWN and not game_state['game_over'] and game_state['correct_button'] is None and not game_state['show_exit_confirmation']:
                 mouse_pos = pygame.mouse.get_pos()
                 clicked_button, is_correct = handle_click(mouse_pos, buttons, current_options, current_flag, game_state['disabled_buttons'])
@@ -211,13 +319,25 @@ def main():
                         game_state['score'] = 0
                         game_state['game_over'] = True
 
-        if game_state['game_over']:
-            draw_end_screen(screen, game_state['score'])
+        if game_state['show_splash']:
+            draw_splash_screen(screen, scaled_splash)
+            
+            # Check if splash screen duration is over
+            if pygame.time.get_ticks() - game_state['splash_start_time'] >= 5000:
+                game_state['show_splash'] = False
+        
+        elif game_state['game_over']:
+            draw_end_screen(screen, game_state['score'], game_state['max_score'])
         else:
             screen.fill((200, 200, 255))
             
+            # Draw score and continent info
             score_text = font.render(f'Очки: {game_state["score"]}', True, (0, 0, 0))
             screen.blit(score_text, (20, 20))
+            
+            continent_text = font.render(f'Страны: {game_state["current_continent"]}', True, (0, 0, 0))
+            continent_rect = continent_text.get_rect(midtop=(window_width // 2, 20))
+            screen.blit(continent_text, continent_rect)
             
             draw_flag(screen, flags[current_flag], game_state['time'])
             
@@ -231,7 +351,7 @@ def main():
         # Move this block outside of the exit confirmation check
         if game_state['correct_button'] is not None and pygame.time.get_ticks() >= game_state['highlight_end_time']:
             game_state['previous_flag'] = current_flag
-            current_flag, current_options, buttons = new_round(flag_names, game_state['previous_flag'], game_state['shown_flags'])
+            current_flag, current_options, buttons = new_round(game_state['filtered_flag_names'], game_state['previous_flag'], game_state['shown_flags'])
             if current_flag is None:
                 game_state['game_over'] = True
             else:
@@ -246,7 +366,7 @@ def main():
 
 def draw_flag(screen, flag_image, time):
     base_x = (window_width - flag_image.get_width()) // 2
-    base_y = 70
+    base_y = 100
     
     for i in range(flag_image.get_width()):
         amplitude_factor = i / flag_image.get_width()
@@ -273,7 +393,7 @@ def draw_button(screen, button, option, is_correct, is_disabled, highlight_time)
         pygame.draw.rect(screen, (220, 220, 220), button)
     
     pygame.draw.rect(screen, (100, 100, 100), button, 2)
-    translated_name = COUNTRY_TRANSLATIONS.get(option, option)
+    translated_name = COUNTRY_TRANSLATIONS.get(option, {}).get('name', option)
     
     # Try to split long names into two lines
     if len(translated_name) > 15:

@@ -1,136 +1,538 @@
 {
-    "Russia": "Россия",
-    "Germany": "Германия",
-    "France": "Франция",
-    "Italy": "Италия",
-    "Spain": "Испания",
-    "Poland": "Польша",
-    "Bhutan": "Бутан",
-    "Belarus": "Беларусь",
-    "Kazakhstan": "Казахстан",
-    "Japan": "Япония",
-    "Portugal": "Португалия",
-    "the_United_Kingdom": "Великобритания",
-    "Belgium": "Бельгия",
-    "Argentina": "Аргентина",
-    "Australia": "Австралия",
-    "Bulgaria": "Болгария",
-    "Austria": "Австрия",
-    "the_People's_Republic_of_China": "Китай",
-    "Ecuador": "Эквадор",
-    "North_Korea": "Северная Корея",
-    "Hungary": "Венгрия",
-    "Israel": "Израиль",
-    "South_Korea": "Южная Корея",
-    "Canada": "Канада",
-    "Indonesia": "Индонезия",
-    "Denmark": "Дания",
-    "India": "Индия",
-    "Georgia": "Грузия",
-    "Iraq": "Ирак",
-    "Chile": "Чили",
-    "Greece": "Греция",
-    "Finland": "Финляндия",
-    "Egypt": "Египет",
-    "Mexico": "Мексика",
-    "Jordan": "Иордания",
-    "Moldova": "Молдова",
-    "Libya": "Ливия",
-    "Liberia": "Либерия",
-    "Côte_d'Ivoire": "Кот-д'Ивуар",
-    "Kuwait": "Кувейт",
-    "Kenya": "Кения",
-    "Iran": "Иран",
-    "Colombia": "Колумбия",
-    "Cuba": "Куба",
-    "Honduras": "Гондурас",
-    "Panama": "Панама",
-    "Ethiopia": "Эфиопия",
-    "Peru": "Перу",
-    "Kyrgyzstan": "Киргизия",
-    "Malta": "Мальта",
-    "Monaco": "Монако",
-    "Ireland": "Ирландия",
-    "Pakistan": "Пакистан",
-    "Paraguay": "Парагвай",
-    "Mongolia": "Монголия",
-    "the_Netherlands": "Нидерланды",
-    "Switzerland": "Швейцария",
-    "Norway": "Норвегия",
-    "Nepal": "Непал",
-    "the_United_States": "Соединенные Штаты Америки",
-    "Nicaragua": "Никарагуа",
-    "Nigeria": "Нигерия",
-    "South_Africa": "Южно-Африканская Республика",
-    "Tanzania": "Танзания",
-    "Serbia": "Сербия",
-    "Uzbekistan": "Узбекистан",
-    "Turkmenistan": "Туркменистан",
-    "Singapore": "Сингапур",
-    "New_Zealand": "Новая Зеландия",
-    "Uganda": "Уганда",
-    "Namibia": "Намибия",
-    "Tunisia": "Тунис",
-    "Zimbabwe": "Зимбабве",
-    "Tajikistan": "Таджикистан",
-    "Sweden": "Швеция",
-    "Slovakia": "Словакия",
-    "Slovenia": "Словения",
-    "Turkey": "Турция",
-    "Romania": "Румыния",
-    "Vietnam": "Вьетнам",
-    "Niger": "Нигер",
-    "Uruguay": "Уругвай",
-    "the_United_Arab_Emirates": "Объединённые Арабские Эмираты",
-    "Rwanda": "Руанда",
-    "Yemen": "Йемен",
-    "Zambia": "Замбия",
-    "Thailand": "Таиланд",
-    "Somalia": "Сомали",
-    "Saudi_Arabia": "Саудовская Аравия",
-    "Sudan": "Судан",
-    "The_Gambia": "Гамбия",
-    "San_Marino": "Сан-Марино",
-    "Belize": "Белиз",
-    "Andorra": "Андорра",
-    "Saint_Vincent_and_the_Grenadines": "Сент-Винсент и Гренадины",
-    "Malawi": "Малави",
-    "Papua_New_Guinea": "Папуа — Новая Гвинея",
-    "Grenada": "Гренада",
-    "Gabon": "Габон",
-    "Mauritius": "Маврикий",
-    "Tonga": "Тонга",
-    "Tuvalu": "Тувалу",
-    "Djibouti": "Джибути",
-    "Lesotho": "Лесото",
-    "Samoa": "Самоа",
-    "South_Sudan": "Южный Судан",
-    "Equatorial_Guinea": "Экваториальная Гвинея",
-    "the_Democratic_Republic_of_the_Congo": "Демократическая Республика Конго",
-    "the_Bahamas": "Багамы",
-    "Guyana": "Гайана",
-    "Liechtenstein": "Лихтенштейн",
-    "Barbados": "Барбадос",
-    "the_Republic_of_the_Congo": "Республика Конго",
-    "Eritrea": "Эритрея",
-    "the_Marshall_Islands": "Маршалловы Острова",
-    "Palau": "Палау",
-    "the_Central_African_Republic": "Центральная Африканская Республика",
-    "Nauru": "Науру",
-    "Antigua_and_Barbuda": "Антигуа и Барбуда",
-    "Botswana": "Ботсвана",
-    "Fiji": "Фиджи",
-    "Saint_Kitts_and_Nevis": "Сент-Китс и Невис",
-    "the_Comoros": "Коморы",
-    "the_Solomon_Islands": "Соломоновы Острова",
-    "São_Tomé_and_Príncipe": "Сан-Томе и Принсипи",
-    "Guinea": "Гвинея",
-    "East_Timor": "Восточный Тимор",
-    "Guinea-Bissau": "Гвинея-Бисау",
-    "Eswatini": "Эсватини",
-    "Saint_Lucia": "Сент-Люсия",
-    "Suriname": "Суринам",
-    "Dominica": "Доминика",
-    "Seychelles": "Сейшельские Острова",
-    "Maldives": "Мальдивы"
+    "Russia": {
+        "name": "Россия",
+        "continent": "Европа"
+    },
+    "Germany": {
+        "name": "Германия",
+        "continent": "Европа"
+    },
+    "France": {
+        "name": "Франция",
+        "continent": "Европа"
+    },
+    "Italy": {
+        "name": "Италия",
+        "continent": "Европа"
+    },
+    "Spain": {
+        "name": "Испания",
+        "continent": "Европа"
+    },
+    "Poland": {
+        "name": "Польша",
+        "continent": "Европа"
+    },
+    "Bhutan": {
+        "name": "Бутан",
+        "continent": "Азия"
+    },
+    "Belarus": {
+        "name": "Беларусь",
+        "continent": "Европа"
+    },
+    "Kazakhstan": {
+        "name": "Казахстан",
+        "continent": "Азия"
+    },
+    "Japan": {
+        "name": "Япония",
+        "continent": "Азия"
+    },
+    "Portugal": {
+        "name": "Португалия",
+        "continent": "Европа"
+    },
+    "the_United_Kingdom": {
+        "name": "Великобритания",
+        "continent": "Европа"
+    },
+    "Belgium": {
+        "name": "Бельгия",
+        "continent": "Европа"
+    },
+    "Argentina": {
+        "name": "Аргентина",
+        "continent": "Южная Америка"
+    },
+    "Australia": {
+        "name": "Австралия",
+        "continent": "Австралия и Океания"
+    },
+    "Bulgaria": {
+        "name": "Болгария",
+        "continent": "Европа"
+    },
+    "Austria": {
+        "name": "Австрия",
+        "continent": "Европа"
+    },
+    "the_People's_Republic_of_China": {
+        "name": "Китай",
+        "continent": "Азия"
+    },
+    "Ecuador": {
+        "name": "Эквадор",
+        "continent": "Южная Америка"
+    },
+    "North_Korea": {
+        "name": "Северная Корея",
+        "continent": "Азия"
+    },
+    "Hungary": {
+        "name": "Венгрия",
+        "continent": "Европа"
+    },
+    "Israel": {
+        "name": "Израиль",
+        "continent": "Азия"
+    },
+    "South_Korea": {
+        "name": "Южная Корея",
+        "continent": "Азия"
+    },
+    "Canada": {
+        "name": "Канада",
+        "continent": "Северная Америка"
+    },
+    "Indonesia": {
+        "name": "Индонезия",
+        "continent": "Азия"
+    },
+    "Denmark": {
+        "name": "Дания",
+        "continent": "Европа"
+    },
+    "India": {
+        "name": "Индия",
+        "continent": "Азия"
+    },
+    "Georgia": {
+        "name": "Грузия",
+        "continent": "Азия"
+    },
+    "Iraq": {
+        "name": "Ирак",
+        "continent": "Азия"
+    },
+    "Chile": {
+        "name": "Чили",
+        "continent": "Южная Америка"
+    },
+    "Greece": {
+        "name": "Греция",
+        "continent": "Европа"
+    },
+    "Finland": {
+        "name": "Финляндия",
+        "continent": "Европа"
+    },
+    "Egypt": {
+        "name": "Египет",
+        "continent": "Африка"
+    },
+    "Mexico": {
+        "name": "Мексика",
+        "continent": "Северная Америка"
+    },
+    "Jordan": {
+        "name": "Иордания",
+        "continent": "Азия"
+    },
+    "Moldova": {
+        "name": "Молдова",
+        "continent": "Европа"
+    },
+    "Libya": {
+        "name": "Ливия",
+        "continent": "Африка"
+    },
+    "Liberia": {
+        "name": "Либерия",
+        "continent": "Африка"
+    },
+    "Côte_d'Ivoire": {
+        "name": "Кот-д'Ивуар",
+        "continent": "Африка"
+    },
+    "Kuwait": {
+        "name": "Кувейт",
+        "continent": "Азия"
+    },
+    "Kenya": {
+        "name": "Кения",
+        "continent": "Африка"
+    },
+    "Iran": {
+        "name": "Иран",
+        "continent": "Азия"
+    },
+    "Colombia": {
+        "name": "Колумбия",
+        "continent": "Южная Америка"
+    },
+    "Cuba": {
+        "name": "Куба",
+        "continent": "Северная Америка"
+    },
+    "Honduras": {
+        "name": "Гондурас",
+        "continent": "Северная Америка"
+    },
+    "Panama": {
+        "name": "Панама",
+        "continent": "Северная Америка"
+    },
+    "Ethiopia": {
+        "name": "Эфиопия",
+        "continent": "Африка"
+    },
+    "Peru": {
+        "name": "Перу",
+        "continent": "Южная Америка"
+    },
+    "Kyrgyzstan": {
+        "name": "Киргизия",
+        "continent": "Азия"
+    },
+    "Malta": {
+        "name": "Мальта",
+        "continent": "Европа"
+    },
+    "Monaco": {
+        "name": "Монако",
+        "continent": "Европа"
+    },
+    "Ireland": {
+        "name": "Ирландия",
+        "continent": "Европа"
+    },
+    "Pakistan": {
+        "name": "Пакистан",
+        "continent": "Азия"
+    },
+    "Paraguay": {
+        "name": "Парагвай",
+        "continent": "Южная Америка"
+    },
+    "Mongolia": {
+        "name": "Монголия",
+        "continent": "Азия"
+    },
+    "the_Netherlands": {
+        "name": "Нидерланды",
+        "continent": "Европа"
+    },
+    "Switzerland": {
+        "name": "Швейцария",
+        "continent": "Европа"
+    },
+    "Norway": {
+        "name": "Норвегия",
+        "continent": "Европа"
+    },
+    "Nepal": {
+        "name": "Непал",
+        "continent": "Азия"
+    },
+    "the_United_States": {
+        "name": "Соединенные Штаты Америки",
+        "continent": "Северная Америка"
+    },
+    "Nicaragua": {
+        "name": "Никарагуа",
+        "continent": "Северная Америка"
+    },
+    "Nigeria": {
+        "name": "Нигерия",
+        "continent": "Африка"
+    },
+    "South_Africa": {
+        "name": "Южно-Африканская Республика",
+        "continent": "Африка"
+    },
+    "Tanzania": {
+        "name": "Танзания",
+        "continent": "Африка"
+    },
+    "Serbia": {
+        "name": "Сербия",
+        "continent": "Европа"
+    },
+    "Uzbekistan": {
+        "name": "Узбекистан",
+        "continent": "Азия"
+    },
+    "Turkmenistan": {
+        "name": "Туркменистан",
+        "continent": "Азия"
+    },
+    "Singapore": {
+        "name": "Сингапур",
+        "continent": "Азия"
+    },
+    "New_Zealand": {
+        "name": "Новая Зеландия",
+        "continent": "Австралия и Океания"
+    },
+    "Uganda": {
+        "name": "Уганда",
+        "continent": "Африка"
+    },
+    "Namibia": {
+        "name": "Намибия",
+        "continent": "Африка"
+    },
+    "Tunisia": {
+        "name": "Тунис",
+        "continent": "Африка"
+    },
+    "Zimbabwe": {
+        "name": "Зимбабве",
+        "continent": "Африка"
+    },
+    "Tajikistan": {
+        "name": "Таджикистан",
+        "continent": "Азия"
+    },
+    "Sweden": {
+        "name": "Швеция",
+        "continent": "Европа"
+    },
+    "Slovakia": {
+        "name": "Словакия",
+        "continent": "Европа"
+    },
+    "Slovenia": {
+        "name": "Словения",
+        "continent": "Европа"
+    },
+    "Turkey": {
+        "name": "Турция",
+        "continent": "Азия"
+    },
+    "Romania": {
+        "name": "Румыния",
+        "continent": "Европа"
+    },
+    "Vietnam": {
+        "name": "Вьетнам",
+        "continent": "Азия"
+    },
+    "Niger": {
+        "name": "Нигер",
+        "continent": "Африка"
+    },
+    "Uruguay": {
+        "name": "Уругвай",
+        "continent": "Южная Америка"
+    },
+    "the_United_Arab_Emirates": {
+        "name": "Объединённые Арабские Эмираты",
+        "continent": "Азия"
+    },
+    "Rwanda": {
+        "name": "Руанда",
+        "continent": "Африка"
+    },
+    "Yemen": {
+        "name": "Йемен",
+        "continent": "Азия"
+    },
+    "Zambia": {
+        "name": "Замбия",
+        "continent": "Африка"
+    },
+    "Thailand": {
+        "name": "Таиланд",
+        "continent": "Азия"
+    },
+    "Somalia": {
+        "name": "Сомали",
+        "continent": "Африка"
+    },
+    "Saudi_Arabia": {
+        "name": "Саудовская Аравия",
+        "continent": "Азия"
+    },
+    "Sudan": {
+        "name": "Судан",
+        "continent": "Африка"
+    },
+    "The_Gambia": {
+        "name": "Гамбия",
+        "continent": "Африка"
+    },
+    "San_Marino": {
+        "name": "Сан-Марино",
+        "continent": "Европа"
+    },
+    "Belize": {
+        "name": "Белиз",
+        "continent": "Северная Америка"
+    },
+    "Andorra": {
+        "name": "Андорра",
+        "continent": "Европа"
+    },
+    "Saint_Vincent_and_the_Grenadines": {
+        "name": "Сент-Винсент и Гренадины",
+        "continent": "Северная Америка"
+    },
+    "Malawi": {
+        "name": "Малави",
+        "continent": "Африка"
+    },
+    "Papua_New_Guinea": {
+        "name": "Папуа — Новая Гвинея",
+        "continent": "Австралия и Океания"
+    },
+    "Grenada": {
+        "name": "Гренада",
+        "continent": "Северная Америка"
+    },
+    "Gabon": {
+        "name": "Габон",
+        "continent": "Африка"
+    },
+    "Mauritius": {
+        "name": "Маврикий",
+        "continent": "Африка"
+    },
+    "Tonga": {
+        "name": "Тонга",
+        "continent": "Австралия и Океания"
+    },
+    "Tuvalu": {
+        "name": "Тувалу",
+        "continent": "Австралия и Океания"
+    },
+    "Djibouti": {
+        "name": "Джибути",
+        "continent": "Африка"
+    },
+    "Lesotho": {
+        "name": "Лесото",
+        "continent": "Африка"
+    },
+    "Samoa": {
+        "name": "Самоа",
+        "continent": "Австралия и Океания"
+    },
+    "South_Sudan": {
+        "name": "Южный Судан",
+        "continent": "Африка"
+    },
+    "Equatorial_Guinea": {
+        "name": "Экваториальная Гвинея",
+        "continent": "Африка"
+    },
+    "the_Democratic_Republic_of_the_Congo": {
+        "name": "Демократическая Республика Конго",
+        "continent": "Африка"
+    },
+    "the_Bahamas": {
+        "name": "Багамы",
+        "continent": "Северная Америка"
+    },
+    "Guyana": {
+        "name": "Гайана",
+        "continent": "Южная Америка"
+    },
+    "Liechtenstein": {
+        "name": "Лихтенштейн",
+        "continent": "Европа"
+    },
+    "Barbados": {
+        "name": "Барбадос",
+        "continent": "Северная Америка"
+    },
+    "the_Republic_of_the_Congo": {
+        "name": "Республика Конго",
+        "continent": "Африка"
+    },
+    "Eritrea": {
+        "name": "Эритрея",
+        "continent": "Африка"
+    },
+    "the_Marshall_Islands": {
+        "name": "Маршалловы Острова",
+        "continent": "Австралия и Океания"
+    },
+    "Palau": {
+        "name": "Палау",
+        "continent": "Австралия и Океания"
+    },
+    "the_Central_African_Republic": {
+        "name": "Центральная Африканская Республика",
+        "continent": "Африка"
+    },
+    "Nauru": {
+        "name": "Науру",
+        "continent": "Австралия и Океания"
+    },
+    "Antigua_and_Barbuda": {
+        "name": "Антигуа и Барбуда",
+        "continent": "Северная Америка"
+    },
+    "Botswana": {
+        "name": "Ботсвана",
+        "continent": "Африка"
+    },
+    "Fiji": {
+        "name": "Фиджи",
+        "continent": "Австралия и Океания"
+    },
+    "Saint_Kitts_and_Nevis": {
+        "name": "Сент-Китс и Невис",
+        "continent": "Северная Америка"
+    },
+    "the_Comoros": {
+        "name": "Коморы",
+        "continent": "Африка"
+    },
+    "the_Solomon_Islands": {
+        "name": "Соломоновы Острова",
+        "continent": "Австралия и Океания"
+    },
+    "São_Tomé_and_Príncipe": {
+        "name": "Сан-Томе и Принсипи",
+        "continent": "Африка"
+    },
+    "Guinea": {
+        "name": "Гвинея",
+        "continent": "Африка"
+    },
+    "East_Timor": {
+        "name": "Восточный Тимор",
+        "continent": "Азия"
+    },
+    "Guinea-Bissau": {
+        "name": "Гвинея-Бисау",
+        "continent": "Африка"
+    },
+    "Eswatini": {
+        "name": "Эсватини",
+        "continent": "Африка"
+    },
+    "Saint_Lucia": {
+        "name": "Сент-Люсия",
+        "continent": "Северная Америка"
+    },
+    "Suriname": {
+        "name": "Суринам",
+        "continent": "Южная Америка"
+    },
+    "Dominica": {
+        "name": "Доминика",
+        "continent": "Северная Америка"
+    },
+    "Seychelles": {
+        "name": "Сейшельские Острова",
+        "continent": "Африка"
+    },
+    "Maldives": {
+        "name": "Мальдивы",
+        "continent": "Азия"
+    }
 }
