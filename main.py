@@ -1,14 +1,13 @@
 import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
-
-import pygame
 import sys
+import pygame
 import io
 import cairosvg
 import math
-import os
 import random
 import json
+import threading
+import multiprocessing
 
 # Load translations from JSON file
 with open('translations.json', 'r', encoding='utf-8') as f:
@@ -43,6 +42,7 @@ def load_flag(file_path):
     return name, pygame.transform.scale(original_flag, (target_width, target_height))
 
 def load_all_flags():
+    print("Loading flags...")
     flags = {}
     flag_names = []
     max_width = 0
@@ -66,6 +66,7 @@ def load_all_flags():
         if country_name not in flag_files:
             print(f"Missing flag file for: {country_name} ({COUNTRY_TRANSLATIONS[country_name]})")
     
+    print("Loading flags done")
     return flags, flag_names, max_width
 
 def create_button(index, option):
@@ -75,7 +76,7 @@ def create_button(index, option):
     y = window_height - 180 + row * (button_height + 20)
     return pygame.Rect(x, y, button_width, button_height)
 
-def new_round(flag_names, previous_flag, shown_flags):
+def new_round(flag_names, shown_flags):
     available_flags = [flag for flag in flag_names if flag not in shown_flags]
     if not available_flags:
         return None, None, None
@@ -113,7 +114,7 @@ def draw_end_screen(screen, score, max_score):
     # Draw "Конец игры"
     game_over_font = pygame.font.SysFont('Arial', 72)
     game_over_text = game_over_font.render('Конец игры', True, (0, 0, 0))
-    game_over_rect = game_over_text.get_rect(center=(window_width//2, window_height//2 - 50))
+    game_over_rect = game_over_text.get_rect(center=(window_width//2, window_height//2 - 100))
     screen.blit(game_over_text, game_over_rect)
     
     # Draw score with correct word form
@@ -204,7 +205,7 @@ def choose_random_continent_and_flags(flag_names):
     filtered_names = filter_flags_by_continent(flag_names, chosen_continent)
     return chosen_continent, filtered_names
 
-def start_new_game(flag_names, is_first_start=False):
+def start_new_game(flag_names):
     chosen_continent, filtered_names = choose_random_continent_and_flags(flag_names)
     max_possible_score = len(filtered_names) * START_ROUND_SCORE
 
@@ -212,7 +213,6 @@ def start_new_game(flag_names, is_first_start=False):
         'score': 0,
         'max_score': max_possible_score, 
         'time': 0,
-        'previous_flag': None,
         'round_score': START_ROUND_SCORE,
         'disabled_buttons': set(),
         'highlight_end_time': 0,
@@ -222,8 +222,7 @@ def start_new_game(flag_names, is_first_start=False):
         'show_exit_confirmation': False,
         'current_continent': chosen_continent,  # Changed from current_letter
         'filtered_flag_names': filtered_names,
-        'show_splash': is_first_start,
-        'splash_start_time': pygame.time.get_ticks() if is_first_start else 0
+        'show_splash': False,
     }
 
 # In main game loop, update the letter info text:
@@ -273,13 +272,16 @@ def load_and_scale_splash_image(image_path, window_width, window_height):
     return pygame.transform.scale(splash_image, (new_width, new_height))
     
 def main():
-    flags, flag_names, max_width = load_all_flags()
-    
-    game_state = start_new_game(flag_names, is_first_start=True)
-    current_flag, current_options, buttons = new_round(game_state['filtered_flag_names'], 
-                                                     game_state['previous_flag'], 
-                                                     game_state['shown_flags'])
-    
+    flags = None
+    flag_names = None
+
+    game_state = {
+        'show_exit_confirmation': False,
+        'show_splash': True,
+        'correct_button': None,
+        'game_over': False,
+        'time': 0,
+    }
     scaled_splash = load_and_scale_splash_image('img/start.png', window_width, window_height)
 
     while True:
@@ -301,11 +303,10 @@ def main():
                         pygame.quit()
                         sys.exit()
                     elif game_state['game_over']:
-                        game_state = start_new_game(flag_names, is_first_start=False)  # Restart without splash
+                        game_state = start_new_game(flag_names)  # Restart without splash
                         current_flag, current_options, buttons = new_round(game_state['filtered_flag_names'], 
-                                                                         game_state['previous_flag'], 
                                                                          game_state['shown_flags'])
-            elif event.type == pygame.MOUSEBUTTONDOWN and not game_state['game_over'] and game_state['correct_button'] is None and not game_state['show_exit_confirmation']:
+            elif not game_state['show_splash'] and event.type == pygame.MOUSEBUTTONDOWN and not game_state['game_over'] and game_state['correct_button'] is None and not game_state['show_exit_confirmation']:
                 mouse_pos = pygame.mouse.get_pos()
                 clicked_button, is_correct = handle_click(mouse_pos, buttons, current_options, current_flag, game_state['disabled_buttons'])
                 if is_correct:
@@ -321,10 +322,11 @@ def main():
 
         if game_state['show_splash']:
             draw_splash_screen(screen, scaled_splash)
-            
-            # Check if splash screen duration is over
-            if pygame.time.get_ticks() - game_state['splash_start_time'] >= 5000:
-                game_state['show_splash'] = False
+            pygame.display.flip()
+            flags, flag_names, _ = load_all_flags()
+            game_state = start_new_game(flag_names)
+            current_flag, current_options, buttons = new_round(game_state['filtered_flag_names'], 
+                                                            game_state['shown_flags'])
         
         elif game_state['game_over']:
             draw_end_screen(screen, game_state['score'], game_state['max_score'])
@@ -348,10 +350,8 @@ def main():
         if game_state['show_exit_confirmation']:
             draw_exit_confirmation(screen)
 
-        # Move this block outside of the exit confirmation check
         if game_state['correct_button'] is not None and pygame.time.get_ticks() >= game_state['highlight_end_time']:
-            game_state['previous_flag'] = current_flag
-            current_flag, current_options, buttons = new_round(game_state['filtered_flag_names'], game_state['previous_flag'], game_state['shown_flags'])
+            current_flag, current_options, buttons = new_round(game_state['filtered_flag_names'], game_state['shown_flags'])
             if current_flag is None:
                 game_state['game_over'] = True
             else:
